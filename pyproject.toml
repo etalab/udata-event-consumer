@@ -19,7 +19,8 @@ classifiers = [
     "Programming Language :: Python :: 3.9"
 ]
 dependencies = [
-    "udata>=4.0.1",
+    "udata>=2.0.1",
+    "udata_event_service==0.0.8"
 ]
 
 [project.optional-dependencies]
@@ -27,10 +28,7 @@ dev = [
     "flake8==3.7.8",
     "invoke==1.3.0",
     "pytest-cov==2.6.1",
-    "flit==3.6.0" 
-
-
-    
+    "flit==3.6.0"
 ]
 test = [
     "httpretty==0.9.7",
@@ -42,22 +40,6 @@ test = [
 
 [project.entry-points."udata.plugins"]
 event-consumer = "udata_event_consumer"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 [project.entry-points."data.plugins"]
 event-consumer = "udata_event_consumer"
