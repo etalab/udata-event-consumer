@@ -1,0 +1,69 @@
+
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "udata-event-consumer"
+description = "A udata plugin to consume kafka events"
+authors = [{name = "Open Data Team", email = "contact@opendata.team"}]
+readme = "README.md"
+license = {text = "AGPL"}
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9"
+]
+dependencies = [
+    "udata>=4.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "flake8==3.7.8",
+    "invoke==1.3.0",
+    "pytest-cov==2.6.1",
+    "flit==3.6.0" 
+
+
+    
+]
+test = [
+    "httpretty==0.9.7",
+    "mock==3.0.5",
+    "pytest-flask==0.15.0",
+    "pytest-sugar==0.9.2",
+    "pytest==4.6.3"
+]
+
+[project.entry-points."udata.plugins"]
+event-consumer = "udata_event_consumer"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[project.entry-points."data.plugins"]
+event-consumer = "udata_event_consumer"
+
+[project.urls]
+Home = "https://github.com/etalab/udata-event-consumer"
+
+[tool.flit.module]
+name = "udata_event_consumer"
