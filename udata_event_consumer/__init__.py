@@ -7,11 +7,6 @@ A udata plugin to consume kafka events
 import os
 
 from .consumer import EventConsumerSingleton
-from .dataset.event import (
-    consume_message_resource_analysed,
-    consume_message_resource_stored,
-    consume_message_resource_checked
-)
 from .commands import consume  # noqa
 
 
@@ -25,6 +20,11 @@ __description__ = 'A plugin to consume events'
 def init_app(app):
     event_consumer = EventConsumerSingleton.get_instance()
 
+    from .dataset.event import (
+        consume_message_resource_analysed,
+        consume_message_resource_stored,
+        consume_message_resource_checked
+    )
     # Register consume functions
     event_consumer.register(
         topics=['udata.resource.analysed'],
