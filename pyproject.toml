@@ -19,7 +19,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9"
 ]
 dependencies = [
-    "udata>=2.0.1",
+    "udata>=4.0.1",
     "udata_event_service==0.0.8"
 ]
 
@@ -39,9 +39,6 @@ test = [
 ]
 
 [project.entry-points."udata.plugins"]
-event-consumer = "udata_event_consumer"
-
-[project.entry-points."data.plugins"]
 event-consumer = "udata_event_consumer"
 
 [project.urls]
