@@ -6,8 +6,6 @@ A udata plugin to consume kafka events
 
 import os
 
-from flask import current_app
-
 from .consumer import EventConsumerSingleton
 from .commands import consume  # noqa
 
@@ -29,17 +27,17 @@ def init_app(app):
     )
     # Register consume functions
     event_consumer.register(
-        topics=[f'{current_app.config["UDATA_INSTANCE_NAME"]}.resource.analysed'],
+        topics=[f'{app.config["UDATA_INSTANCE_NAME"]}.resource.analysed'],
         message_types=['resource.analysed'],
         function=consume_message_resource_analysed
     )
     event_consumer.register(
-        topics=[f'{current_app.config["UDATA_INSTANCE_NAME"]}.resource.stored'],
+        topics=[f'{app.config["UDATA_INSTANCE_NAME"]}.resource.stored'],
         message_types=['resource.stored'],
         function=consume_message_resource_stored
     )
     event_consumer.register(
-        topics=[f'{current_app.config["UDATA_INSTANCE_NAME"]}.resource.checked'],
+        topics=[f'{app.config["UDATA_INSTANCE_NAME"]}.resource.checked'],
         message_types=['event-update', 'initialization', 'regular-update'],
         function=consume_message_resource_checked
     )
