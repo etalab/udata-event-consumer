@@ -7,7 +7,8 @@ log = logging.getLogger(__name__)
 
 def consume_message_resource_analysed(key, value):
     '''
-    Reads a message and update the resource extras with the payload values.
+    Reads a message and update the resource extras with analysis information, ex:
+    report location, mime, filesize, etc.
     '''
     log.info("Consuming message analysed")
     resource = get_resource(UUID(key))
@@ -28,7 +29,7 @@ def consume_message_resource_analysed(key, value):
 
 def consume_message_resource_stored(key, value):
     '''
-    Reads a message and update the resource extras with the payload values.
+    Reads a message and update the resource extras with the S3 stored location.
     '''
     log.info("Consuming message stored")
     resource = get_resource(UUID(key))
@@ -44,7 +45,8 @@ def consume_message_resource_stored(key, value):
 
 def consume_message_resource_checked(key, value):
     '''
-    Reads a message and update the resource extras with the payload values.
+    Reads a message and update the resource extras with checked information, in particular:
+    status, timeout, check date.
     '''
     log.info("Consuming message checked")
     resource = get_resource(UUID(key))
