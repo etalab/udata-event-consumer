@@ -1,10 +1,9 @@
 import pytest
 
-from udata import settings
-from udata.app import create_app
+import udata_event_consumer
 
 
 @pytest.fixture
-def app():
-    app = create_app(settings.Defaults, override=settings.Testing)
-    return app
+def event_consumer_app(app):
+    udata_event_consumer.init_app(app)
+    yield app
