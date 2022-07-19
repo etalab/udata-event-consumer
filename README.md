@@ -15,3 +15,8 @@ Then activate it in your `udata.cfg`:
 ```python
 PLUGINS = ['event-consumer']
 ```
+
+You are now ready to start your udata consumer:
+```bash
+udata event consume
+```
