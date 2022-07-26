@@ -32,7 +32,7 @@ def consume_message_resource_analysed(key: str, message: dict) -> None:
     if resource:
         if service == 'udata-hydra':
             for key in ['error', 'filesize', 'mime']:
-                if value[key]:
+                if value.get(key, None) is not None:
                     resource.extras[f'analysis:{key}'] = value[key]
         elif service == 'csvdetective':
             resource.extras['analysis:report_location'] = concat_location(value['report_location'])
@@ -69,7 +69,7 @@ def consume_message_resource_checked(key: str, message: dict) -> None:
     value = message['value']
     if resource:
         for key in ['status', 'timeout', 'check_date']:
-            if value[key]:
+            if value.get(key, None) is not None:
                 resource.extras[f'check:{key}'] = value[key]
         resource.save()
     else:

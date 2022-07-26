@@ -14,9 +14,9 @@ class ConsumerTest:
         dataset.add_resource(resource)
 
         data = {
-            'service': 'datalake',
+            'service': 'udata-hydra',
             'value': {
-                'location': {
+                'data_location': {
                     'netloc': 'http://localhost:9000/',
                     'bucket': 'bucket',
                     'key': 'folder/path.csv'
@@ -33,8 +33,8 @@ class ConsumerTest:
 
         dataset.reload()
         resource = dataset.resources[0]
-        assert set(resource.extras.keys()) == {'store:location'}
-        assert resource.extras['store:location'] == 'http://localhost:9000/bucket/folder/path.csv'
+        assert set(resource.extras.keys()) == {'store:data_location'}
+        assert resource.extras['store:data_location'] == 'http://localhost:9000/bucket/folder/path.csv'
 
     def test_consume_resource_analysed_csvdetective_event(self):
         dataset = DatasetFactory()
@@ -44,11 +44,18 @@ class ConsumerTest:
         data = {
             'service': 'csvdetective',
             'value': {
-                'location': {
-                    'url': 'http://localhost:9000/',
+                'report_location': {
+                    'netloc': 'http://localhost:9000/',
                     'bucket': 'bucket',
                     'key': 'report/path.json'
-                }
+                },
+                'tableschema_location': {
+                    'netloc': 'http://localhost:9000/',
+                    'bucket': 'bucket',
+                    'key': 'schemas/path.json'
+                },
+                'delimiter': ';',
+                'encoding': 'ASCII'
             },
             'meta': {
                 'dataset_id': str(dataset.id),
@@ -61,8 +68,13 @@ class ConsumerTest:
 
         dataset.reload()
         resource = dataset.resources[0]
-        assert list(resource.extras.keys()) == ['analysis:location']
-        assert resource.extras['analysis:location'] == 'http://localhost:9000/bucket/report/path.json'
+        assert set(resource.extras.keys()) == {
+            'analysis:report_location', 'analysis:tableschema_location', 'analysis:delimiter', 'analysis:encoding'
+        }
+        assert resource.extras['analysis:report_location'] == 'http://localhost:9000/bucket/report/path.json'
+        assert resource.extras['analysis:tableschema_location'] == 'http://localhost:9000/bucket/schemas/path.json'
+        assert resource.extras['analysis:delimiter'] == ';'
+        assert resource.extras['analysis:encoding'] == 'ASCII'
 
     def test_consume_resource_analysed_hydra_event(self):
         dataset = DatasetFactory()
@@ -70,7 +82,7 @@ class ConsumerTest:
         dataset.add_resource(resource)
 
         data = {
-            'service': 'datalake',
+            'service': 'udata-hydra',
             'value': {
                 'mime': 'text/plain',
                 'resource_url': 'https://static.data.gouv.fr/resources/path.csv',
@@ -87,11 +99,9 @@ class ConsumerTest:
 
         dataset.reload()
         resource = dataset.resources[0]
-        assert set(resource.extras.keys()) == {'analysis:mime', 'analysis:filesize',
-                                               'analysis:resource_url'}
+        assert set(resource.extras.keys()) == {'analysis:mime', 'analysis:filesize'}
         assert resource.extras['analysis:mime'] == 'text/plain'
         assert resource.extras['analysis:filesize'] == 154612
-        assert resource.extras['analysis:resource_url'] == 'https://static.data.gouv.fr/resources/path.csv'
 
     def test_consume_resource_analysed_hydra_event_with_error(self):
         dataset = DatasetFactory()
@@ -99,7 +109,7 @@ class ConsumerTest:
         dataset.add_resource(resource)
 
         data = {
-            'service': 'datalake',
+            'service': 'udata-hydra',
             'value': {
                 'resource_url': 'https://static.data.gouv.fr/resources/path.csv',
                 'filesize': None,
@@ -116,8 +126,7 @@ class ConsumerTest:
 
         dataset.reload()
         resource = dataset.resources[0]
-        assert set(resource.extras.keys()) == {'analysis:error', 'analysis:resource_url'}
-        assert resource.extras['analysis:resource_url'] == 'https://static.data.gouv.fr/resources/path.csv'
+        assert set(resource.extras.keys()) == {'analysis:error'}
         assert resource.extras['analysis:error'] == 'File too large to download'
 
     def test_consume_resource_checked(self):
@@ -126,7 +135,7 @@ class ConsumerTest:
         dataset.add_resource(resource)
 
         data = {
-            'service': 'datalake',
+            'service': 'udata-hydra',
             'value': {
                 'url': 'https://www.data.gouv.fr/fr/datasets/r/79b5cac4-4957-486b-bbda-322d80868224',
                 'domain': 'www.data.gouv.fr',
@@ -138,15 +147,15 @@ class ConsumerTest:
                     '...': '...',
                     'access-control-allow-origin': '*',
                     'access-control-allow-methods': 'GET, OPTIONS',
-                    'content-encoding': 'gzip'
+                    'content-encoding': 'gzip',
                 },
                 'timeout': False,
-                'response_time': 0.16390085220336914
+                'response_time': 0.16390085220336914,
+                'check_date': '2020-02-02 20:20:20.202020'
             },
             'meta': {
                 'dataset_id': str(dataset.id),
                 'message_type': 'event-update',
-                'check_date': '2020-02-02 20:20:20.202020'
             }
         }
 
