@@ -1,5 +1,7 @@
 # event-consumer
 
+**⚠️ This repository is archived following the use of Webhooks instead of Kafka in udata.**
+
 A udata plugin to consume kafka events
 
 ## Usage
